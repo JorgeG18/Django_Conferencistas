@@ -1,0 +1,89 @@
+{%extends "base.html" %}
+
+{% block title %}
+    Conferencista
+{% endblock %}
+    <!-----emmet investigar-->
+
+{% block container %}
+    <div class="row">
+        <!--FORMULARIO-->
+        <div class="col-4">
+
+            <form action="" method="post">
+            
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="nombre">Nombre</label>
+                <input type="text" name="nombre" id="nombre" class="form-control">
+            </div>
+            
+            <div  class="mb-3">
+                <label for="apellido">Apellido</label>
+                <input type="text" name="apellido" id="apellido" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="floatingTextarea2">Experiencia</label>
+                <textarea class="form-control" name="experiencia" id="experiencia" style="height: 100px"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <input type="submit" class="btn btn-success" value="Registrar Conferencista">
+            </div>
+       </form>
+    </div>
+   <!----Tabla-->
+    <div class="col-8">
+    {% if messages %}
+            <div class="alert alert-success mb-2">
+            {% for message in messages %}
+                {{ message|safe }}
+            {% endfor %}
+            </div>
+        {% endif %}
+
+        <form action="" method="get">
+            <input type="search" name="q" value="{{ q|default_if_none:'' }}" class="form-control" placeholder="Buscar Conferencista">
+        </form>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Experiencia</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in conferencista%}
+                    <tr>
+                        <td>{{c.nombre}}</td>
+                        <td>{{c.apellido}}</td>
+                        <td>{{c.experiencia}}</td>
+                        <td class="text-center">
+                            <a href="{% url 'eliminar_conferencista' c.id %}" onclick="if (!confirm('Confirme la eliminacion')) return false;" class="text-danger"><span class="fas fa-trash-alt"></a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-danger text-center">No se encontraron resultados</td>
+                    </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% block js %}
+<script>
+    $(function (){
+        setTimeout(() =>{
+            $('.alert').slideUp(function (){
+                $(this).remove();
+            });
+        },2000)
+    });
+</script>   
+{% endblock %}
+{% endblock %}
